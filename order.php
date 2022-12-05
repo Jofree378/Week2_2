@@ -17,7 +17,7 @@ if($email) {
     $query = $pdo->prepare("SELECT * FROM users WHERE `email` = :email");
     $query->execute(['email' => $email]);
     if (!$query) {
-        echo 1;
+        echo "Запрос на поиск пользователя не выполнен";
         print_r($pdo->errorInfo()); die;
     }
 
@@ -28,7 +28,7 @@ if($email) {
         $queryIn = $pdo->prepare("INSERT INTO users (user_name, email, count_orders) values (:userName, :email, '1')");
         $queryIn->execute(['userName' => $userName, 'email' => $email]);
         if (!$queryIn) {
-            echo 2;
+            echo "Запрос на создание пользователя не выполнен";
             print_r($pdo->errorInfo()); die;
         }
     } else {
@@ -36,7 +36,7 @@ if($email) {
         $queryUp = $pdo->prepare("UPDATE users SET count_orders = count_orders + 1, user_name = :userName WHERE `email` = :email");
         $queryUp->execute(['userName' => $userName, 'email' => $email]);
         if (!$queryUp) {
-            echo 3;
+            echo "Запрос на увеличение количества заказов не выполнен";
             print_r($pdo->errorInfo()); die;
         }
     }
@@ -52,7 +52,7 @@ if($email) {
     $orderAdd = $pdo->prepare("INSERT INTO `order` (user_id, `date`, address) values (:userId, NOW(), :address)");
     $orderAdd->execute(['userId' => $userId, 'address' => $address]);
     if (!$orderAdd) {
-        echo 4;
+        echo "Запрос на дополнение таблицы заказов не выполнен";
         print_r($pdo->errorInfo()); die;
     }
 
@@ -60,7 +60,7 @@ if($email) {
     $orderS = $pdo->prepare("SELECT * FROM `order` ORDER BY order_id DESC LIMIT 1");
     $orderS->execute();
     if (!$orderS) {
-        echo 5;
+        echo "Запрос на выборку данных о заказе не выполнен";
         print_r($pdo->errorInfo()); die;
     }
     $orders = $orderS->fetch(PDO::FETCH_LAZY);
